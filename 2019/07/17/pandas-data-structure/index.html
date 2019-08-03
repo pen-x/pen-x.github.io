@@ -1,0 +1,252 @@
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>Pandas 数据结构 | 晴风村</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Pandas 数据结构</h1><a id="logo" href="/.">晴风村</a><p class="description">沿着鹰翼广场外的路一直往南走就可以到达晴风村了，祝你好运，朋友。</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Pandas 数据结构</h1><div class="post-meta">Jul 17, 2019</div><a class="disqus-comment-count" data-disqus-identifier="2019/07/17/pandas-data-structure/" href="/2019/07/17/pandas-data-structure/#disqus_thread"></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Series"><span class="toc-number">1.</span> <span class="toc-text">Series</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#构造函数"><span class="toc-number">1.1.</span> <span class="toc-text">构造函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#创建空的-Series"><span class="toc-number">1.1.1.</span> <span class="toc-text">创建空的 Series</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从列表创建-Series"><span class="toc-number">1.1.2.</span> <span class="toc-text">从列表创建 Series</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从字典创建-Series"><span class="toc-number">1.1.3.</span> <span class="toc-text">从字典创建 Series</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从标量创建-Series"><span class="toc-number">1.1.4.</span> <span class="toc-text">从标量创建 Series</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本属性"><span class="toc-number">1.2.</span> <span class="toc-text">基本属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DataFrame"><span class="toc-number">2.</span> <span class="toc-text">DataFrame</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#构造函数-1"><span class="toc-number">2.1.</span> <span class="toc-text">构造函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#创建空的-DataFrame"><span class="toc-number">2.1.1.</span> <span class="toc-text">创建空的 DataFrame</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从列表创建-DataFrame"><span class="toc-number">2.1.2.</span> <span class="toc-text">从列表创建 DataFrame</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从字典创建-DataFrame"><span class="toc-number">2.1.3.</span> <span class="toc-text">从字典创建 DataFrame</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本属性-1"><span class="toc-number">2.2.</span> <span class="toc-text">基本属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Index"><span class="toc-number">3.</span> <span class="toc-text">Index</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#构造函数-2"><span class="toc-number">3.1.</span> <span class="toc-text">构造函数</span></a></li></ol></li></ol></div></div><div class="post-content"><p>Pandas 中最基本的数据类型包括 Series、DataFrame 和 Index：</p>
+<ul>
+<li>Series是一种类似于一维数组的对象，它由一组数据（各种NumPy数据类型）以及一组与之相关的数据标签（即索引）组成。</li>
+<li>DataFrame是一个表格型的数据结构，它含有一组有序的列，每列可以是不同的值类型（数值、字符串、布尔值等），但同一列中的数据类型相同。DataFrame既有行索引也有列索引，它可以被看做由Series组成的字典（共用同一个索引）。DataFrame中的数据是以一个或多个二维块存放的（而不是列表、字典或别的一维数据结构）。</li>
+<li>Index 对象负责管理轴标签和其他元数据（比如轴名称等）。构建Series或DataFrame时，所用到的任何数组或其他序列的标签都会被转换成一个Index。</li>
+</ul>
+<p><img src="/images/pandas-data-structure.png" alt></p>
+<h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pandas.Series(data=<span class="literal">None</span>, index=<span class="literal">None</span>, dtype=<span class="literal">None</span>, name=<span class="literal">None</span>, copy=<span class="literal">False</span>, fastpath=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>Series 中要存储的数据，可以是类数组类型、可迭代类型、字典类型、标量</td>
+</tr>
+<tr>
+<td>index</td>
+<td>Series 中数据的索引，需要和数据的长度相同，默认为 np.arange(n)</td>
+</tr>
+<tr>
+<td>dtype</td>
+<td>Series 的数据类型，如果没有，将推断数据类型</td>
+</tr>
+<tr>
+<td>copy</td>
+<td>是否从输入中复制数据，默认为 false</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Series 名称</td>
+</tr>
+</tbody>
+</table>
+<h4 id="创建空的-Series"><a href="#创建空的-Series" class="headerlink" title="创建空的 Series"></a>创建空的 Series</h4><p>不提供任何参数，则可以创建一个空的 Series。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: s = pd.Series()</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: s</span><br><span class="line">Out[<span class="number">2</span>]: Series([], dtype: float64)</span><br></pre></td></tr></table></figure>
+<h4 id="从列表创建-Series"><a href="#从列表创建-Series" class="headerlink" title="从列表创建 Series"></a>从列表创建 Series</h4><p>如果 data 是列表类型的，那么 index 参数需要具有相同的长度，否认会默认创建 [0, 1, 2, …, len(data) - 1] 的默认索引。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">3</span>]: s = pd.Series(np.random.randn(<span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: s</span><br><span class="line">Out[<span class="number">4</span>]:</span><br><span class="line"><span class="number">0</span>   <span class="number">-0.574951</span></span><br><span class="line"><span class="number">1</span>   <span class="number">-0.209498</span></span><br><span class="line"><span class="number">2</span>    <span class="number">0.057490</span></span><br><span class="line"><span class="number">3</span>    <span class="number">0.257507</span></span><br><span class="line"><span class="number">4</span>    <span class="number">0.309958</span></span><br><span class="line">dtype: float64</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: s = pd.Series(np.random.randn(<span class="number">5</span>), index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: s</span><br><span class="line">Out[<span class="number">6</span>]:</span><br><span class="line">a   <span class="number">-1.907402</span></span><br><span class="line">b   <span class="number">-0.403695</span></span><br><span class="line">c    <span class="number">0.862696</span></span><br><span class="line">d   <span class="number">-0.126665</span></span><br><span class="line">e   <span class="number">-1.162734</span></span><br><span class="line">dtype: float64</span><br></pre></td></tr></table></figure>
+<h4 id="从字典创建-Series"><a href="#从字典创建-Series" class="headerlink" title="从字典创建 Series"></a>从字典创建 Series</h4><p>如果 data 是字典类型的，则默认以字典的键作为索引。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">7</span>]: s = pd.Series(&#123;<span class="string">'b'</span>: <span class="number">1</span>, <span class="string">'a'</span>: <span class="number">0</span>, <span class="string">'c'</span>: <span class="number">2</span>&#125;)</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: s</span><br><span class="line">Out[<span class="number">8</span>]:</span><br><span class="line">b    <span class="number">1</span></span><br><span class="line">a    <span class="number">0</span></span><br><span class="line">c    <span class="number">2</span></span><br><span class="line">dtype: int64</span><br></pre></td></tr></table></figure>
+<p>对于 python 版本 &gt;= 3.6 且 pandas 版本 &gt;= 0.23 的情况，index 会按照字典的插入顺序排序，反之则按照键值的词汇顺序排序。在上述的例子中，低版本情况下 Series 的索引会显示为 [‘a’, ‘b’, ‘c’]。</p>
+<p>如果设置了 index 参数，则索引中与 index 对应的数据中的值将被拉出，不存在的设置值为 NaN（即非数字，用于表示缺失或NA值）。和列表不同，这里 index 的长度并不需要和字典的长度一致。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">9</span>]: s = pd.Series(&#123;<span class="string">'b'</span>: <span class="number">1</span>, <span class="string">'a'</span>: <span class="number">0</span>, <span class="string">'c'</span>: <span class="number">2</span>&#125;, index=[<span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'a'</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: s</span><br><span class="line">Out[<span class="number">10</span>]:</span><br><span class="line">b    <span class="number">1.0</span></span><br><span class="line">c    <span class="number">2.0</span></span><br><span class="line">d    NaN</span><br><span class="line">a    <span class="number">0.0</span></span><br><span class="line">dtype: float64</span><br></pre></td></tr></table></figure>
+<h4 id="从标量创建-Series"><a href="#从标量创建-Series" class="headerlink" title="从标量创建 Series"></a>从标量创建 Series</h4><p>如果 data 是标量值，则每个索引标签都对应这个标量值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">11</span>]: s = pd.Series(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: s</span><br><span class="line">Out[<span class="number">12</span>]:</span><br><span class="line"><span class="number">0</span>    <span class="number">5</span></span><br><span class="line">dtype: int64</span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: s = pd.Series(<span class="number">5</span>, index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: s</span><br><span class="line">Out[<span class="number">14</span>]:</span><br><span class="line">a    <span class="number">5</span></span><br><span class="line">b    <span class="number">5</span></span><br><span class="line">c    <span class="number">5</span></span><br><span class="line">d    <span class="number">5</span></span><br><span class="line">e    <span class="number">5</span></span><br><span class="line">dtype: int64</span><br></pre></td></tr></table></figure>
+<h3 id="基本属性"><a href="#基本属性" class="headerlink" title="基本属性"></a>基本属性</h3><p>我们以下面的 Series 为例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">15</span>]: s = pd.Series(<span class="number">5</span>, index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>], name=<span class="string">'data'</span>)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>Series 的名字</td>
+<td>‘data’</td>
+</tr>
+<tr>
+<td>index</td>
+<td>Series 的索引</td>
+<td>Index([‘a’, ‘b’, ‘c’, ‘d’, ‘e’], dtype=’object’)</td>
+</tr>
+<tr>
+<td>array</td>
+<td>Series 的底层数据</td>
+<td><pandasarray> [5, 5, 5, 5, 5] Length: 5, dtype: int64</pandasarray></td>
+</tr>
+<tr>
+<td>dtype</td>
+<td>Series 的底层数据类型</td>
+<td>dtype(‘int64’)</td>
+</tr>
+<tr>
+<td>shape</td>
+<td>Series 的底层数据形状，形式为 (n, )</td>
+<td>(5,)</td>
+</tr>
+<tr>
+<td>ndim</td>
+<td>Series 的底层数据维度，始终为 1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>size</td>
+<td>Series 的底层数据个数</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<h2 id="DataFrame"><a href="#DataFrame" class="headerlink" title="DataFrame"></a>DataFrame</h2><h3 id="构造函数-1"><a href="#构造函数-1" class="headerlink" title="构造函数"></a>构造函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pandas.DataFrame(data=<span class="literal">None</span>, index=<span class="literal">None</span>, columns=<span class="literal">None</span>, dtype=<span class="literal">None</span>, copy=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>DataFrame 中要存储的数据，可以是类数组类型、可迭代类型、字典类型、其它 DataFrame。对于字典类型，其中可以包含 Series、数组、常量等</td>
+</tr>
+<tr>
+<td>index</td>
+<td>DataFrame 中数据的行索引，可以是 Index 或数组类型，如果 data 参数无法推断出索引信息，同时也没有指定 index 参数，则默认使用 RangeIndex (0, 1, 2, …, n)</td>
+</tr>
+<tr>
+<td>columns</td>
+<td>DataFrame 中数据的列索引，要求与 index 参数一致</td>
+</tr>
+<tr>
+<td>dtype</td>
+<td>DataFrame 的数据类型，如果没有，将推断数据类型</td>
+</tr>
+<tr>
+<td>copy</td>
+<td>是否从输入中复制数据，默认为 false</td>
+</tr>
+</tbody>
+</table>
+<h4 id="创建空的-DataFrame"><a href="#创建空的-DataFrame" class="headerlink" title="创建空的 DataFrame"></a>创建空的 DataFrame</h4><p>如果不提供任何参数，则可以创建一个空的 DataFrame。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: df = pd.DataFrame()</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">Empty DataFrame</span><br><span class="line">Columns: []</span><br><span class="line">Index: []</span><br></pre></td></tr></table></figure>
+<h4 id="从列表创建-DataFrame"><a href="#从列表创建-DataFrame" class="headerlink" title="从列表创建 DataFrame"></a>从列表创建 DataFrame</h4><p>通过列表来创建 DataFrame 时，如果列表只有一维，则会创建只有一列的 DataFrame。其它情况下，例如列表中的各项为列表、字典或 Series，则各项会分别成为 DataFrame 的一行。</p>
+<p>一维列表：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: df = pd.DataFrame([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">    <span class="number">0</span></span><br><span class="line"><span class="number">0</span>   <span class="number">1</span></span><br><span class="line"><span class="number">1</span>   <span class="number">2</span></span><br><span class="line"><span class="number">2</span>   <span class="number">3</span></span><br><span class="line"><span class="number">3</span>   <span class="number">4</span></span><br><span class="line"><span class="number">4</span>   <span class="number">5</span></span><br></pre></td></tr></table></figure>
+<p>列表中的各项为列表时：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: df = pd.DataFrame(np.arange(<span class="number">20</span>).reshape((<span class="number">5</span>, <span class="number">4</span>)))</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">    <span class="number">0</span>   <span class="number">1</span>   <span class="number">2</span>   <span class="number">3</span></span><br><span class="line"><span class="number">0</span>   <span class="number">0</span>   <span class="number">1</span>   <span class="number">2</span>   <span class="number">3</span></span><br><span class="line"><span class="number">1</span>   <span class="number">4</span>   <span class="number">5</span>   <span class="number">6</span>   <span class="number">7</span></span><br><span class="line"><span class="number">2</span>   <span class="number">8</span>   <span class="number">9</span>  <span class="number">10</span>  <span class="number">11</span></span><br><span class="line"><span class="number">3</span>  <span class="number">12</span>  <span class="number">13</span>  <span class="number">14</span>  <span class="number">15</span></span><br><span class="line"><span class="number">4</span>  <span class="number">16</span>  <span class="number">17</span>  <span class="number">18</span>  <span class="number">19</span></span><br></pre></td></tr></table></figure>
+<p>一般需要用户指定行、列标签：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: df = pd.DataFrame(np.arange(<span class="number">20</span>).reshape((<span class="number">5</span>, <span class="number">4</span>)),</span><br><span class="line">                          index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>],</span><br><span class="line">                          columns=[<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">    A   B   C   D</span><br><span class="line">a   <span class="number">0</span>   <span class="number">1</span>   <span class="number">2</span>   <span class="number">3</span></span><br><span class="line">b   <span class="number">4</span>   <span class="number">5</span>   <span class="number">6</span>   <span class="number">7</span></span><br><span class="line">c   <span class="number">8</span>   <span class="number">9</span>  <span class="number">10</span>  <span class="number">11</span></span><br><span class="line">d  <span class="number">12</span>  <span class="number">13</span>  <span class="number">14</span>  <span class="number">15</span></span><br><span class="line">e  <span class="number">16</span>  <span class="number">17</span>  <span class="number">18</span>  <span class="number">19</span></span><br></pre></td></tr></table></figure>
+<p>列表中的各项为字典时，字典的键会被合并成为 DataFrame 的列标签。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: data = [&#123;<span class="string">'a'</span>: <span class="number">1</span>, <span class="string">'b'</span>: <span class="number">2</span>&#125;,&#123;<span class="string">'a'</span>: <span class="number">5</span>, <span class="string">'b'</span>: <span class="number">10</span>, <span class="string">'c'</span>: <span class="number">20</span>&#125;]</span><br><span class="line">        df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">   a   b     c</span><br><span class="line"><span class="number">0</span>  <span class="number">1</span>   <span class="number">2</span>   NaN</span><br><span class="line"><span class="number">1</span>  <span class="number">5</span>  <span class="number">10</span>  <span class="number">20.0</span></span><br></pre></td></tr></table></figure>
+<p>当列表中的各项为 Series 时，Series 的索引会被合并成结果的列标签。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: data = [pd.Series([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]),</span><br><span class="line">                pd.Series([<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>], index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>])]</span><br><span class="line">        df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">   a  b  c</span><br><span class="line"><span class="number">0</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">3</span></span><br><span class="line"><span class="number">1</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">6</span></span><br></pre></td></tr></table></figure>
+<h4 id="从字典创建-DataFrame"><a href="#从字典创建-DataFrame" class="headerlink" title="从字典创建 DataFrame"></a>从字典创建 DataFrame</h4><p>通过字典来创建 DataFrame 时，字典中的各项会成为 DataFrame 的一列，字典的键构成 DataFrame 的列标签。</p>
+<p>如果字典是由数组、列表或元组组成的，那么每个序列的长度要求必须相同。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: data = &#123;<span class="string">'state'</span>: [<span class="string">'Ohio'</span>, <span class="string">'Ohio'</span>, <span class="string">'Ohio'</span>, <span class="string">'Nevada'</span>, <span class="string">'Nevada'</span>, <span class="string">'Nevada'</span>],</span><br><span class="line">                <span class="string">'year'</span>: [<span class="number">2000</span>, <span class="number">2001</span>, <span class="number">2002</span>, <span class="number">2001</span>, <span class="number">2002</span>, <span class="number">2003</span>],</span><br><span class="line">                <span class="string">'pop'</span>: [<span class="number">1.5</span>, <span class="number">1.7</span>, <span class="number">3.6</span>, <span class="number">2.4</span>, <span class="number">2.9</span>, <span class="number">3.2</span>]&#125;</span><br><span class="line">        df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">    state  year  pop</span><br><span class="line"><span class="number">0</span>    Ohio  <span class="number">2000</span>  <span class="number">1.5</span></span><br><span class="line"><span class="number">1</span>    Ohio  <span class="number">2001</span>  <span class="number">1.7</span></span><br><span class="line"><span class="number">2</span>    Ohio  <span class="number">2002</span>  <span class="number">3.6</span></span><br><span class="line"><span class="number">3</span>  Nevada  <span class="number">2001</span>  <span class="number">2.4</span></span><br><span class="line"><span class="number">4</span>  Nevada  <span class="number">2002</span>  <span class="number">2.9</span></span><br><span class="line"><span class="number">5</span>  Nevada  <span class="number">2003</span>  <span class="number">3.2</span></span><br></pre></td></tr></table></figure>
+<p>如果字典是由字典组成的，那么内层字典的键会被用作行标签。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: data = &#123;<span class="string">'Nevada'</span>: &#123;<span class="number">2001</span>: <span class="number">2.4</span>, <span class="number">2002</span>: <span class="number">2.9</span>&#125;,</span><br><span class="line">                <span class="string">'Ohio'</span>: &#123;<span class="number">2000</span>: <span class="number">1.5</span>, <span class="number">2001</span>: <span class="number">1.7</span>, <span class="number">2002</span>: <span class="number">3.6</span>&#125;&#125;</span><br><span class="line">        df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">      Nevada  Ohio</span><br><span class="line"><span class="number">2000</span>     NaN   <span class="number">1.5</span></span><br><span class="line"><span class="number">2001</span>     <span class="number">2.4</span>   <span class="number">1.7</span></span><br><span class="line"><span class="number">2002</span>     <span class="number">2.9</span>   <span class="number">3.6</span></span><br></pre></td></tr></table></figure>
+<p>如果字典是由 Series 组成的，那么各 Series 的索引会被合并成结果的行索引。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: data = &#123;<span class="string">'one'</span> : pd.Series([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]),</span><br><span class="line">                <span class="string">'two'</span> : pd.Series([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>])&#125;</span><br><span class="line">        df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">   one  two</span><br><span class="line">a  <span class="number">1.0</span>    <span class="number">1</span></span><br><span class="line">b  <span class="number">2.0</span>    <span class="number">2</span></span><br><span class="line">c  <span class="number">3.0</span>    <span class="number">3</span></span><br><span class="line">d  NaN    <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h3 id="基本属性-1"><a href="#基本属性-1" class="headerlink" title="基本属性"></a>基本属性</h3><p>我们以下面的 Series 为例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">15</span>]: df = pd.DataFrame([(<span class="string">'parrot'</span>,   <span class="number">24.0</span>, <span class="string">'second'</span>),</span><br><span class="line">                    (<span class="string">'lion'</span>,     <span class="number">80.5</span>, <span class="number">1</span>),</span><br><span class="line">                    (<span class="string">'monkey'</span>, np.nan, <span class="literal">None</span>)], columns=(<span class="string">'name'</span>, <span class="string">'max_speed'</span>, <span class="string">'rank'</span>))</span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: dfprint(df)</span><br><span class="line">Out[<span class="number">15</span>]:</span><br><span class="line">     name  max_speed    rank</span><br><span class="line"><span class="number">0</span>  parrot       <span class="number">24.0</span>  second</span><br><span class="line"><span class="number">1</span>    lion       <span class="number">80.5</span>       <span class="number">1</span></span><br><span class="line"><span class="number">2</span>  monkey        NaN    <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index</td>
+<td>DataFrame 行索引</td>
+<td>RangeIndex(start=0, stop=3, step=1)</td>
+</tr>
+<tr>
+<td>columns</td>
+<td>DataFrame 列索引</td>
+<td>Index([‘name’, ‘max_speed’, ‘rank’], dtype=’object’)</td>
+</tr>
+<tr>
+<td>dtypes</td>
+<td>DataFrame 中各列的数据类型</td>
+<td>name          object<br> max_speed    float64<br> rank          object<br> dtype: object</td>
+</tr>
+<tr>
+<td>values</td>
+<td>DataFrame 底层数据的 numpy 表示，建议使用 to_numpy() 方法替代</td>
+<td>array([[‘parrot’, 24.0, ‘second’],<br>        [‘lion’, 80.5, 1],<br>        [‘monkey’, nan, None]], dtype=object)</td>
+</tr>
+<tr>
+<td>ndim</td>
+<td>DataFrame 的底层数据维度，始终为 2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>size</td>
+<td>DataFrame 的底层数据个数</td>
+<td>9</td>
+</tr>
+<tr>
+<td>shape</td>
+<td>DataFrame 的底层数据形状</td>
+<td>(3, 3)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h2><p>Pandas 中的索引类型有很多，包括单调序列索引 RangeIndex、类别索引 CategoricalIndex、多层索引 MultiIndex、间隔索引 IntervalIndex 等，它们都继承自 Index 类型。</p>
+<p>Index 对象的一大特点在于它是不可变的，任何修改 Index 的操作都会返回一个新的 Index 对象。</p>
+<h3 id="构造函数-2"><a href="#构造函数-2" class="headerlink" title="构造函数"></a>构造函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pandas.Index(data=<span class="literal">None</span>, dtype=<span class="literal">None</span>, copy=<span class="literal">False</span>, name=<span class="literal">None</span>, fastpath=<span class="literal">None</span>, tupleize_cols=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>通过列表构造 Index：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: idx = pd.Index([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(idx)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">Int64Index([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], dtype=<span class="string">'int64'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">1</span>]: idx = pd.Index(list(<span class="string">'abc'</span>))</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(idx)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">Index([<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>], dtype=<span class="string">'object'</span>)</span><br></pre></td></tr></table></figure>
+<p>Series 的行标签，DataFrame 的行标签和列标签都是 Index 类型:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: data = &#123;<span class="string">'Nevada'</span>: &#123;<span class="number">2001</span>: <span class="number">2.4</span>, <span class="number">2002</span>: <span class="number">2.9</span>&#125;,</span><br><span class="line">                <span class="string">'Ohio'</span>: &#123;<span class="number">2000</span>: <span class="number">1.5</span>, <span class="number">2001</span>: <span class="number">1.7</span>, <span class="number">2002</span>: <span class="number">3.6</span>&#125;&#125;</span><br><span class="line">        df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df.index)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">Int64Index([<span class="number">2000</span>, <span class="number">2001</span>, <span class="number">2002</span>], dtype=<span class="string">'int64'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df.columns)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">Index([<span class="string">'Nevada'</span>, <span class="string">'Ohio'</span>], dtype=<span class="string">'object'</span>)</span><br></pre></td></tr></table></figure>
+<p>与python的集合不同，pandas的Index可以包含重复的标签：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: dup_labels = pd.Index([<span class="string">'foo'</span>, <span class="string">'foo'</span>, <span class="string">'bar'</span>, <span class="string">'bar'</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(dup_labels)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">Index([<span class="string">'foo'</span>, <span class="string">'foo'</span>, <span class="string">'bar'</span>, <span class="string">'bar'</span>], dtype=<span class="string">'object'</span>)</span><br></pre></td></tr></table></figure>
+<p>可以手动设置 index 的 name：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: df = pd.DataFrame([(<span class="string">'parrot'</span>,   <span class="number">24.0</span>, <span class="string">'second'</span>),</span><br><span class="line">                    (<span class="string">'lion'</span>,     <span class="number">80.5</span>, <span class="number">1</span>),</span><br><span class="line">                    (<span class="string">'monkey'</span>, np.nan, <span class="literal">None</span>)], columns=(<span class="string">'name'</span>, <span class="string">'max_speed'</span>, <span class="string">'rank'</span>))</span><br><span class="line">        df.index.name = <span class="string">'animal'</span></span><br><span class="line">        df.columns.name = <span class="string">'property'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: print(df)</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">property    name  max_speed    rank</span><br><span class="line">animal                             </span><br><span class="line"><span class="number">0</span>         parrot       <span class="number">24.0</span>  second</span><br><span class="line"><span class="number">1</span>           lion       <span class="number">80.5</span>       <span class="number">1</span></span><br><span class="line"><span class="number">2</span>         monkey        NaN    <span class="literal">None</span></span><br></pre></td></tr></table></figure></div><div class="tags"><a href="/tags/pandas/">pandas</a></div><div class="post-nav"><a class="pre" href="/2019/07/23/pandas-io-tools/">Pandas IO 工具</a><a class="next" href="/2018/08/31/setup-hexo-deployment-server/">搭建 Hexo 部署服务器</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://yoursite.com/2019/07/17/pandas-data-structure/';
+    this.page.identifier = '2019/07/17/pandas-data-structure/';
+    this.page.title = 'Pandas 数据结构';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//blog-penx.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//blog-penx.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://blog-penx.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="http://yoursite.com"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/pandas/" style="font-size: 15px;">pandas</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/08/02/pandas-merge/">Pandas 数据集合并（2）</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/02/pandas-concat/">Pandas 数据集合并（1）</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/29/pandas-multi-index/">Pandas 层次化索引</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/27/pandas-indexing/">Pandas 索引方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/pandas-io-tools/">Pandas IO 工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/17/pandas-data-structure/">Pandas 数据结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/31/setup-hexo-deployment-server/">搭建 Hexo 部署服务器</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Recent Comments</i></div><script type="text/javascript" src="//blog-penx.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">晴风村.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
